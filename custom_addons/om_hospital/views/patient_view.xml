@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--    Calendar View-->
+    <record id="view_hospital_patient_calendar" model="ir.ui.view">
+        <field name="name">hospital.patient.calendar</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <calendar string="Calendar" date_start="date" color="name">
+                <field name="name"/>
+                <field name="last_name"/>
+            </calendar>
+        </field>
+    </record>
+    <!--    Graph view-->
+    <record id="view_hospital_patient_graph" model="ir.ui.view">
+        <field name="name">hospital.patient.graph</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <graph string="Patients Analysis" sample="1">
+                <field name="blood_group"/>
+            </graph>
+        </field>
+    </record>
+    <!--    Pivot view-->
+    <record id="view_hospital_patient_pivot" model="ir.ui.view">
+        <field name="name">hospital.patient.pivot</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <pivot string="Patients">
+                <field name="name" type="row"/>
+                <field name="last_name"/>
+                <field name="age" type="col"/>
+                <field name="blood_group"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!--Search view-->
+    <record id="view_hospital_patient_search" model="ir.ui.view">
+        <field name="name">hospital.patient.search</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Patient First Name"
+                       filter_domain="['|', ('name', 'ilike', self), ('blood_group', 'ilike', self)]"/>
+                <field name="blood_group" string="Patient Blood Group"/>
+                <field name="gender" string="Patient Gender"/>
+                <group expand="0" string="Group By">
+                    <filter name="group by gender" string="Gender" context="{'group_by':'gender'}"/>
+                </group>
+
+            </search>
+        </field>
+    </record>
+    <!--Tree view-->
+    <record id="view_hospital_patient_tree" model="ir.ui.view">
+        <field name="name">hospital.patient.tree</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" string="Patient First Name"/>
+                <field name="last_name" string="Patient Last Name"/>
+                <field name="age" string="Patient Age"/>
+                <field name="gender" string="Patient Gender"/>
+                <field name="blood_group" string="Patient Blood Group"/>
+            </tree>
+        </field>
+    </record>
+    <!--Form view-->
+    <record id="view_hospital_patient_form" model="ir.ui.view">
+        <field name="name">hospital.patient.form</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="last_name"/>
+                            <field name="age"/>
+                            <field name="gender"/>
+                            <button name="action_test" string="Object Button"
+                                    help="A message will be printed in the log"
+                                    confirm="Are you sure to execute the python code ?"
+                                    type="object" class="oe_highlight"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="blood_group"/>
+                            <field name="active"/>
+                            <field name="attachments"/>
+                            <button name="%(om_hospital.action_hospital_patient)d" string="Action Button"
+                                    help="On clicking this, you will be re-directed to patients records"
+                                    confirm="Are you sure to open the patient action ?"
+                                    type="action" class="oe_highlight"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Pharmacy" name="pharmacy">
+                            <field name="pharmacy_line_ids">
+                                <tree editable="bottom">
+                                    <field name="medicine_id"/>
+                                    <field name="price_unit"/>
+                                    <!--                                    <field name="price_unit" sum="Total Price"/>-->
+                                    <field name="qty"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <field name="medicine_id"/>
+                                        <field name="price_unit"/>
+                                        <field name="qty"/>
+                                    </group>
+                                </form>
+                            </field>
+                            <group>
+                                <field name="total"/>
+                            </group>
+                        </page>
+                        <page string="Doctors" name="doctor">
+                            <group>
+                                <field name="doctor_id"/>
+                                <!--                                <tree editable="bottom">-->
+
+                                <!--                                </tree>-->
+                                <!--                                <form>-->
+                                <!--                                    <group>-->
+                                <!--                                        <field name="name"/>-->
+                                <!--                                        <field name="contact"/>-->
+                                <!--                                        <field name="email"/>-->
+                                <!--                                    </group>-->
+                                <!--                                </form>-->
+                                <field name="contact"/>
+                                <field name="email"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!--Kanban view-->
+    <record id="view_hospital_patient_kanban" model="ir.ui.view">
+        <field name="name">hospital.patient.kanban</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <kanban sample="1" class="o_kanban_product_template">
+                <field name="name"/>
+                <field name="last_name"/>
+                <field name="age"/>
+                <field name="blood_group"/>
+                <template>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <div>
+                                    <div>
+                                        <div class="o_kanban_image">
+                                            <image alt="image" t-att-src="kanban_image('hospital.patient', 'image')"/>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <strong>
+                                                <field name="name"/>
+                                                <span></span>
+                                                <field name="last_name"/>
+                                            </strong>
+                                            <br/>
+                                        </div>
+                                        <div>
+                                            <div>
+                                                <field name="age"/>
+                                                <br/>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div>
+                                                <field name="blood_group"/>
+                                                <br/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </template>
+            </kanban>
+        </field>
+    </record>
+    <!-- To create window action-->
+    <record id="action_hospital_patient" model="ir.actions.act_window">
+        <field name="name">Patients</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hospital.patient</field>
+        <field name="view_mode">tree,form,kanban,pivot,graph,calendar</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first patient !
+            </p>
+        </field>
+    </record>
+    <menuitem
+            id="menu_patient"
+            name="Patient"
+            action="action_hospital_patient"
+            parent="menu_patient_master"
+            sequence="10"/>
+</odoo>
